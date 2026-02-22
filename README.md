@@ -6,44 +6,53 @@ This repository defines a role-based engineering organization built with Cursor 
 
 - Role subagents live in `.cursor/agents/`
 - Reusable capabilities live in `.cursor/skills/`
+- Always-on enforcement rules live in `.cursor/rules/`
 - SDLC uses explicit handoffs, artifacts, and approval gates
 - VP Engineering is a human-in-the-loop decision role, not a subagent
 - Git is the source of truth for planning, implementation, verification, and release records
+- Detailed SDLC reference: `docs/SDLC.md`
 
 ## Role Subagents
 
 - `product-manager`: market opportunities, value proposition, initiative/epic framing
+- `designer`: design discovery, UX/UI specifications, and experience validation
 - `program-manager`: program/project breakdown, sequencing, dependencies, risk tracking
 - `engineering-manager`: estimation, staffing, execution planning, quality accountability
 - `developer`: implementation, tests, refactoring, defect fixes
 - `qa`: test strategy, acceptance validation, regression confidence
 - `devops`: CI/CD, environment reliability, release safety
 - `architect-security`: architecture direction, security validation, NFR governance
+- `manager`: orchestrates subagents, enforces SDLC phase progression, and handles gate pauses
 
 ## Human Governance Role
 
 The VP Engineering role is performed by the human operator. Agents must pause and request explicit sign-off when a gate is triggered.
 
+Mandatory VP gates are fixed at transitions 1->2, 3->4, and pre-live 5->6. Outside these gates, VP sign-off is only required for escalations.
+
 ## Canonical Role-to-Skill Matrix
 
-- `product-manager` (required): `product-discovery`, `roadmap-prioritization`; (optional): `delivery-planning`, `cost-and-budgeting`
+- `product-manager` (required): `product-discovery`, `roadmap-prioritization`; (optional): `design-discovery-spec`, `delivery-planning`, `cost-and-budgeting`
+- `designer` (required): `design-discovery-spec`; (optional): `product-discovery`, `architecture-security-review`
 - `program-manager` (required): `delivery-planning`, `vp-signoff-gates`; (optional): `roadmap-prioritization`, `cost-and-budgeting`, `org-governance-enforcement`
 - `engineering-manager` (required): `engineering-execution`, `vp-signoff-gates`; (optional): `code-quality-review`, `delivery-planning`, `org-governance-enforcement`
 - `developer` (required): `engineering-execution`, `code-quality-review`; (optional): `qa-test-strategy`, `architecture-security-review`, `security-continuous-validation`
 - `qa` (required): `qa-test-strategy`; (optional): `code-quality-review`, `devops-release`, `security-continuous-validation`
 - `devops` (required): `devops-release`; (optional): `cost-and-budgeting`, `architecture-security-review`, `security-continuous-validation`, `vp-signoff-gates`
 - `architect-security` (required): `architecture-security-review`, `security-continuous-validation`; (optional): `engineering-execution`, `code-quality-review`, `cost-and-budgeting`
+- `manager` (required): `delivery-planning`, `org-governance-enforcement`, `vp-signoff-gates`; (optional): `security-continuous-validation`
 
 ## SDLC Workflow and Minimum Artifacts
 
 1. **Opportunity and Discovery** (Product Manager)
-   - Required artifacts: problem statement, value hypothesis, target metrics, initial cost envelope
-2. **Initiative Shaping** (Product + Program + Architect/Security)
-   - Required artifacts: epic map, constraints, initial architecture notes, risk register
-3. **Planning and Estimation** (Program + Engineering Manager + Developer)
-   - Required artifacts: work breakdown, estimate baseline, dependency map, milestone plan
-4. **Build and Verify** (Developer + QA)
-   - Required artifacts: PR set, test evidence, defect log, quality summary
+   - Required artifacts: PRD with functional requirements, non-functional requirements, metrics, and initial cost envelope
+2. **Initiative Shaping** (Product + Designer + Architect/Security)
+   - Required artifacts: design discovery outputs, UX/UI design spec, architecture document, threat model, scope boundaries, initial epic map
+3. **Planning and Estimation** (Program + Engineering Manager + Developer + QA)
+   - Required artifacts: work breakdown, estimate baseline, dependency map, milestone plan, QA test plan, user stories
+   - User story fields: description, acceptance criteria, story points in ideal days, criticality (must/should/could/wont)
+4. **Build and Verify** (Developer + QA + DevOps)
+   - Required artifacts: PR set, automated test evidence mapped to test plan, defect log, quality summary
 5. **Release Readiness** (DevOps + QA + Architect/Security)
    - Required artifacts: release checklist, security validation report, rollout/rollback plan
 6. **Release and Observe** (DevOps + Program + Product)
@@ -51,7 +60,7 @@ The VP Engineering role is performed by the human operator. Agents must pause an
 
 ## Halt and Notify Workflow (Long-Running Agent Control)
 
-When any gate below triggers, agents must halt execution and produce a VP decision brief using `vp-signoff-gates`:
+Manager enforces assembly-line halts at mandatory stage gates and escalation triggers. When a halt occurs, agents must produce a VP decision brief using `vp-signoff-gates`:
 
 - include trigger reason, options, recommendation, reversible/irreversible impact
 - include cost impact (delivery/runtime/agent usage), confidence, and risk level
@@ -59,15 +68,20 @@ When any gate below triggers, agents must halt execution and produce a VP decisi
 
 No gate decision means no continuation beyond the blocking step.
 
-## VP Sign-Off Thresholds (Default Policy)
+## VP Sign-Off Policy
 
-VP approval is required when any condition is true:
+Mandatory stage-gate approvals:
+
+- Gate 1: between Stage 1 and Stage 2
+- Gate 2: between Stage 3 and Stage 4 (must include detailed delivery cost estimate)
+- Gate 3: before live release (between Stage 5 and Stage 6)
+
+Escalation approvals (any phase):
 
 - budget variance exceeds 15% versus approved baseline
 - scope increase exceeds 20% effort versus approved scope
 - architecture/security risk is rated high or critical and cannot be fully mitigated in-cycle
 - release risk is high (rollback uncertainty, major customer impact, or critical unresolved defects)
-- initiative starts above medium cost envelope or cross-team staffing impact
 
 ## Continuous Security Validation
 
@@ -78,6 +92,13 @@ Security checks are mandatory at shaping, build, and release phases:
 - release-time security readiness check with explicit residual risk statement
 
 Use `security-continuous-validation` and `architecture-security-review` together for high-risk changes.
+
+## Test Quality Policy
+
+- QA owns the test plan at Stage 3.
+- Stage 4 evidence must trace to test-plan items.
+- Automated testing follows the test pyramid: static analysis, unit, integration, then minimal end-to-end.
+- Manual testing is exploratory support, not the primary validation path.
 
 ## Git-Based Workflow
 
@@ -101,7 +122,7 @@ Use `org-governance-enforcement` as a periodic and pre-release audit to verify:
 
 ## How To Use
 
-- invoke role subagents directly (example: `/product-manager`, `/developer`, `/qa`)
+- invoke role subagents directly (example: `/manager`, `/product-manager`, `/designer`, `/developer`, `/qa`)
 - request parallel workstreams in one prompt when appropriate
 - keep prompts outcome-focused (inputs, constraints, outputs, deadline)
 - when a gate triggers, review the VP brief and provide decision before agents continue

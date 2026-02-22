@@ -7,12 +7,19 @@ description: Applies executive decision gates for high-impact scope, budget, ris
 
 ## Instructions
 
-1. Check if the decision crosses any escalation threshold.
-2. If a threshold is crossed, halt execution before irreversible steps.
-3. Summarize options, costs, risks, and recommendation.
-4. Identify what is reversible versus irreversible.
-5. Provide an explicit ask for VP Engineering (human) decision.
-6. Record decision conditions and next checkpoint.
+1. Check whether this checkpoint is one of the mandatory stage gates in `docs/SDLC.md`.
+2. Check whether any escalation threshold is crossed.
+3. If either condition is true, halt execution before irreversible steps.
+4. Summarize options, costs, risks, and recommendation.
+5. Identify what is reversible versus irreversible.
+6. Provide an explicit ask for VP Engineering (human) decision.
+7. Record decision conditions and next checkpoint.
+
+## Mandatory Stage Gates
+
+- Gate 1: between Stage 1 and Stage 2
+- Gate 2: between Stage 3 and Stage 4 (include detailed delivery cost estimate)
+- Gate 3: before live release (between Stage 5 and Stage 6)
 
 ## Default Escalation Thresholds
 
@@ -20,7 +27,6 @@ description: Applies executive decision gates for high-impact scope, budget, ris
 - Scope increase > 20% effort versus approved scope
 - High or critical unresolved architecture/security risk
 - High release risk (rollback uncertainty, major customer impact, or critical unresolved defects)
-- Initiative start with medium-or-higher cost envelope and cross-team staffing impact
 
 ## Escalation Categories
 
@@ -31,6 +37,7 @@ description: Applies executive decision gates for high-impact scope, budget, ris
 
 ## Output Template
 
+- Trigger type (mandatory stage gate and/or escalation)
 - Gate trigger(s)
 - Decision options
 - Recommendation

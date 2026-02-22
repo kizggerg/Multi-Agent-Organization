@@ -11,11 +11,17 @@ description: Breaks initiatives into executable work with sequencing, dependenci
 2. Sequence tasks by dependency and risk.
 3. Define milestones with entry/exit criteria.
 4. Identify cross-team blockers and mitigations.
-5. Keep plans updatable as facts change.
+5. Enforce user-story schema for each story:
+   - description
+   - acceptance criteria
+   - story points measured in ideal days
+   - criticality (must/should/could/wont)
+6. Keep plans updatable as facts change.
 
 ## Output Template
 
 - Work breakdown structure
+- Story breakdown with required schema fields
 - Milestones and timeline
 - Dependency map
 - Risks and mitigations

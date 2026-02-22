@@ -1,0 +1,20 @@
+---
+description: Enforce SDLC phase discipline and VP gate pauses for all agent workflows
+alwaysApply: true
+---
+
+# SDLC Enforcement
+
+- Always use `docs/SDLC.md` as the source of truth for lifecycle steps.
+- Start by identifying the current SDLC phase before planning or coding.
+- Enforce required artifacts for the current phase before moving forward.
+- Enforce PRD completion (including functional and non-functional requirements) before Stage 1->2 gate.
+- Enforce design discovery outputs (UX/UI design spec, architecture document, threat model) before Stage 2->3 transition.
+- Enforce user-story schema in planning: description, acceptance criteria, story points in ideal days, and criticality (must/should/could/wont).
+- Enforce QA-owned test plan in Stage 3 and evidence traceability to test-plan items in Stage 4.
+- Enforce test pyramid automation preference: static analysis, unit, integration, then minimal end-to-end.
+- Enforce mandatory VP gates at stage transitions 1->2, 3->4, and pre-live 5->6.
+- Run security validation at shaping, build, and release-readiness phases.
+- If any escalation threshold is triggered, halt and produce a VP decision brief.
+- Never proceed past a triggered gate without explicit human VP decision.
+- Prefer `/manager` to coordinate multi-agent workflows and phase transitions.
