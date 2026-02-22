@@ -19,6 +19,7 @@ Collaboration:
 
 Preferred shared skills:
 - `product-discovery`
+- `product-research`
 - `roadmap-prioritization`
 - `delivery-planning`
 - `cost-and-budgeting`

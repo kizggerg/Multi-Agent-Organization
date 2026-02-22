@@ -32,7 +32,7 @@ Mandatory VP gates are fixed at transitions 1->2, 3->4, and pre-live 5->6. Outsi
 
 ## Canonical Role-to-Skill Matrix
 
-- `product-manager` (required): `product-discovery`, `roadmap-prioritization`; (optional): `design-discovery-spec`, `delivery-planning`, `cost-and-budgeting`
+- `product-manager` (required): `product-discovery`, `product-research`, `roadmap-prioritization`; (optional): `design-discovery-spec`, `delivery-planning`, `cost-and-budgeting`
 - `designer` (required): `design-discovery-spec`; (optional): `product-discovery`, `architecture-security-review`
 - `program-manager` (required): `delivery-planning`, `vp-signoff-gates`; (optional): `roadmap-prioritization`, `cost-and-budgeting`, `org-governance-enforcement`
 - `engineering-manager` (required): `engineering-execution`, `vp-signoff-gates`; (optional): `code-quality-review`, `delivery-planning`, `org-governance-enforcement`
